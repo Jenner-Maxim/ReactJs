@@ -3,6 +3,8 @@ import { useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useEffect } from "react";
 import TodoList from "./TodoList";
+import "./App.css";
+import Header from "./Header";
 
 const LOCAL_STORAGE_KEY = "todoApp.todos";
 
@@ -13,27 +15,68 @@ function App() {
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
     if (storedTodos) setTodos(storedTodos);
+
+    // Added
+    // const storedTodoName = localStorage.getItem("todoApp.todoName");
+    // if (storedTodoName) todoNameRef.current.value = storedTodoName;
+    // Up here
   }, []);
 
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
   }, [todos]);
 
-  function handleAddTo(e) {
+  function toggleTodo(id) {
+    const newTodos = [...todos];
+    const todo = newTodos.find((todo) => todo.id === id);
+    todo.complete = !todo.complete;
+    setTodos(newTodos);
+  }
+
+  function handleAddTodo(e) {
     const name = todoNameRef.current.value;
     if (name === "") return;
-    setTodos((prevTodo) => {
-      return [...prevTodo, { id: uuidv4(), name: name, complete: false }];
+    setTodos((prevTodos) => {
+      return [...prevTodos, { id: uuidv4(), name: name, complete: false }];
     });
     todoNameRef.current.value = null;
+    // Added
+    // localStorage.setItem("todoApp.todoName", name);
+    // Up here
   }
+
+  function handleClearTodos() {
+    const newTodos = todos.filter((todo) => !todo.complete);
+    setTodos(newTodos);
+  }
+
+ const handleKeypress = e => {
+  if (e.keyCode === 13){
+    handleAddTodo();
+  }
+ }
+
   return (
     <>
-      <TodoList todos={todos} />
-      <input ref={todoNameRef} type="text" />
-      <button onClick={handleAddTo}>Add Todo</button>
-      <button>Clear Completed</button>
-      <div>0 left</div>
+      <Header />
+      <div className="app">
+        <TodoList todos={todos} toggleTodo={toggleTodo} />
+        <div className="down">
+          <input className="input" onKeyDown={handleKeypress} onke ref={todoNameRef} type="text" />
+          <br></br>
+          <div className="buttons">
+            <button className="add" onClick={handleAddTodo}>
+              Add Todo
+            </button>
+            <button className="clear" onClick={handleClearTodos}>
+              Clear Completed
+            </button>
+          </div>
+          <div className="remain">
+            {todos.filter((todo) => !todo.complete).length} left
+          </div>
+        </div>
+      </div>
     </>
   );
 }
