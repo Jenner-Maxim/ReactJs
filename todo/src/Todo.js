@@ -14,6 +14,7 @@ function Todo({ todo, toggleTodo }) {
         />
         {todo.name}
       </label>
+      {/* <p>{time}</p> */}
     </div>
   );
 }

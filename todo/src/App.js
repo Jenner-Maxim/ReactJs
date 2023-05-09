@@ -11,6 +11,7 @@ const LOCAL_STORAGE_KEY = "todoApp.todos";
 function App() {
   const [todos, setTodos] = useState([]);
   const todoNameRef = useRef();
+  // const [time, setTime] = useState();
 
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
@@ -40,6 +41,12 @@ function App() {
       return [...prevTodos, { id: uuidv4(), name: name, complete: false }];
     });
     todoNameRef.current.value = null;
+
+    // Time
+    // const now = new Date();
+    // const currentTime = ["Date: ", now.toLocaleDateString(), ", Time: ", now.toLocaleTimeString()];
+    // setTime(currentTime);
+
     // Added
     // localStorage.setItem("todoApp.todoName", name);
     // Up here
@@ -61,6 +68,7 @@ function App() {
       <Header />
       <div className="app">
         <TodoList todos={todos} toggleTodo={toggleTodo} />
+        {/* <p>{time}</p> */}
         <div className="down">
           <input className="input" onKeyDown={handleKeypress} onke ref={todoNameRef} type="text" />
           <br></br>
