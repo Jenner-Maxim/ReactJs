@@ -1,7 +1,5 @@
-import { useState } from "react";
-import { useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useEffect } from "react";
 import TodoList from "./TodoList";
 import "./App.css";
 import Header from "./Header";
